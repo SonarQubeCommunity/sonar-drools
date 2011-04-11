@@ -18,15 +18,8 @@
 
 package org.sonar.plugins.drools;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.AbstractSourceImporter;
-import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.plugins.drools.language.Drools;
 
 /**
@@ -37,23 +30,10 @@ import org.sonar.plugins.drools.language.Drools;
  */
 public class DroolsSourceImporter extends AbstractSourceImporter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(DroolsSourceImporter.class);
-
   public DroolsSourceImporter(Project project) {
     super(new Drools(project));
     DroolsPlugin.configureSourceDir(project);
   }
-//
-//  @Override
-//  protected Resource<?> createResource(java.io.File file, List<java.io.File> sourceDirs, boolean unitTest) {
-//    LOG.debug(this.toString()+":" + file.getPath());
-//    return File.fromIOFile(file, sourceDirs);
-//  }
-//
-//  @Override
-//  public boolean shouldExecuteOnProject(Project project) {
-//    return isEnabled(project) && StringUtils.equals(Drools.KEY, project.getLanguageKey());
-//  }
 
   @Override
   public String toString() {
