@@ -38,6 +38,7 @@
 	</developers>
 
 	<properties>
+		<!-- Sonar Plugin configuration -->
 		<sonar.version>2.4</sonar.version>
 		<license.name>AL2</license.name>
 		<sonar.pluginName>Drools</sonar.pluginName>
@@ -45,6 +46,9 @@
 
 		<!-- License header configuration -->
 		<license.owner>Jérémie Lagarde</license.owner>
+
+		<!-- Drools version -->
+		<drools.version>5.1.1</drools.version>
 
 	</properties>
 
@@ -55,10 +59,8 @@
 	</issueManagement>
 
 	<!-- Not yet activated -->
-	<!-- ciManagement>
-		<system>BAMBOO</system>
-		<url>http://ci.codehaus.org/browse/SONAR-DROOLS</url> 
-	</ciManagement -->
+	<!-- ciManagement> <system>BAMBOO</system> <url>http://ci.codehaus.org/browse/SONAR-DROOLS</url> 
+		</ciManagement -->
 
 	<scm>
 		<connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/drools</connection>
@@ -72,6 +74,12 @@
 				<groupId>org.codehaus.sonar</groupId>
 				<artifactId>sonar-plugin-api</artifactId>
 				<version>${sonar.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.drools</groupId>
+				<artifactId>drools-compiler</artifactId>
+				<version>${drools.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -105,6 +113,12 @@
 			<groupId>org.codehaus.sonar</groupId>
 			<artifactId>sonar-plugin-api</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- Drools dependencies -->
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-compiler</artifactId>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -209,6 +223,20 @@
 			<id>codehaus.org</id>
 			<name>Codehaus Repository</name>
 			<url>http://repository.codehaus.org</url>
+		</repository>
+		<repository>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public Repository Group</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
 		</repository>
 	</repositories>
 </project>
