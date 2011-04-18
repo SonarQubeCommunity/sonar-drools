@@ -24,27 +24,22 @@ import java.util.Set;
 
 public final class DrlKeywords {
 
-	private static final Set<String> KEYWORDS = new HashSet<String>();
+  private static final Set<String> KEYWORDS = new HashSet<String>();
 
-	private static final String[] DROOLS_KEYWORDS = new String[] { "when",
-			"then", "rule", "end", "update", "modify", "retract", "insert",
-			"insertLogical", "salience", "import", "expander", "package",
-			"function", "global", "query", "exists", "eval", "agenda-group",
-			"lock-on-active", "no-loop", "duration", "->", "not", "auto-focus",
-			"activation-group", "new", "contains", "matches", "excludes",
-			"template", "from", "accumulate", "collect", "date-effective",
-			"date-expires", "enabled", "forall", "dialect", "ruleflow-group",
-			"modifyRetract", "modifyInsert", "memberOf", "and", "or", "declare"
-	};
+  private static final String[] DROOLS_KEYWORDS = new String[] { "when", "then", "rule", "end", "update", "modify", "retract", "insert",
+      "insertLogical", "salience", "import", "expander", "package", "function", "global", "query", "exists", "eval", "agenda-group",
+      "lock-on-active", "no-loop", "duration", "->", "not", "auto-focus", "activation-group", "new", "contains", "matches", "excludes",
+      "template", "from", "accumulate", "collect", "date-effective", "date-expires", "enabled", "forall", "dialect", "ruleflow-group",
+      "modifyRetract", "modifyInsert", "memberOf", "and", "or", "declare" };
 
-	static {
-		Collections.addAll(KEYWORDS, DROOLS_KEYWORDS);
-	}
+  static {
+    Collections.addAll(KEYWORDS, DROOLS_KEYWORDS);
+  }
 
-	private DrlKeywords() {
-	}
+  private DrlKeywords() {
+  }
 
-	public static Set<String> get() {
-		return Collections.unmodifiableSet(KEYWORDS);
-	}
+  public static Set<String> get() {
+    return Collections.unmodifiableSet(KEYWORDS);
+  }
 }
