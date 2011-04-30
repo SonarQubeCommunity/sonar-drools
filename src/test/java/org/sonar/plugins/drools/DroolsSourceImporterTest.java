@@ -18,63 +18,45 @@
 
 package org.sonar.plugins.drools;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
-import java.io.FileReader;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.configuration.MapConfiguration;
-import org.apache.commons.io.IOUtils;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.project.MavenProject;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.sonar.api.batch.AbstractSensorTest;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.DefaultProjectFileSystem;
 import org.sonar.api.resources.Project;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.drools.language.Drools;
+import org.sonar.plugins.drools.resources.DroolsFile;
 
-public class DroolsSourceImporterTest {
+/**
+ * Test for drools source importer.
+ *
+ * @author Jeremie Lagarde
+ * @since 0.1
+ */
+public class DroolsSourceImporterTest extends AbstractSensorTest<Drools> {
   
   @Test
   public void testAnalyse() throws Exception {
     File pomFile = new File("projects/simple/pom.xml");
     final Project project = loadProjectFromPom(pomFile);
-    DroolsSourceImporter importer = new DroolsSourceImporter(project);
-    SensorContext context = mock(SensorContext.class);
-    importer.analyse(project, context);
-  }
-  
-
-  private static MavenProject loadPom(File pomFile) throws URISyntaxException {
-    FileReader fileReader = null;
-    try {
-      fileReader = new FileReader(pomFile);
-      Model model = new MavenXpp3Reader().read(fileReader);
-      MavenProject project = new MavenProject(model);
-      project.setFile(pomFile);
-      project.addCompileSourceRoot(project.getBuild().getSourceDirectory());
-      project.getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
-      return project;
-    } catch (Exception e) {
-      throw new SonarException("Failed to read Maven project file : " + pomFile.getPath(), e);
-    } finally {
-      IOUtils.closeQuietly(fileReader);
-    }
+    project.getPom().getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
+    SensorContext context = analyse(new DroolsSourceImporter(project), project);
+    File rule = new File("projects/simple/src/main/rules/org/sonarsource/tests/simple/hello.drl");
+    List<File> sourceDirs = new ArrayList<File>();
+    sourceDirs.add(new File("projects/simple/src/main/rules"));
+    DroolsFile resource = DroolsFile.fromIOFile(rule, false);
+    String source = FileUtils.readFileToString(rule, project.getFileSystem().getSourceCharset().name());
+    verify(context).saveSource(resource, source);
   }
 
-  protected Project loadProjectFromPom(File pomFile) throws Exception {
-    MavenProject pom = loadPom(pomFile);
-    Project project = new Project(pom.getGroupId() + ":" + pom.getArtifactId()).setPom(pom).setConfiguration(
-        new MapConfiguration(pom.getProperties()));
-    project.setFileSystem(new DefaultProjectFileSystem(project));
-    project.setPom(pom);
-    project.setLanguageKey(Drools.INSTANCE.getKey());
-    project.setLanguage(Drools.INSTANCE);
-
-    return project;
+  @Override
+  protected Drools getLanguage() {
+    return Drools.INSTANCE;
   }
 
 }

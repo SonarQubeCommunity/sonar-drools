@@ -42,4 +42,8 @@ public final class DrlKeywords {
   public static Set<String> get() {
     return Collections.unmodifiableSet(KEYWORDS);
   }
+
+  public static String[] toArray() {
+    return KEYWORDS.toArray(new String[KEYWORDS.size()]);
+  }
 }

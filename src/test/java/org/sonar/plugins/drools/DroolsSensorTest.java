@@ -19,37 +19,36 @@
 package org.sonar.plugins.drools;
 
 import java.io.File;
-import java.util.List;
 
-import org.sonar.api.batch.AbstractSourceImporter;
+import org.junit.Test;
+import org.sonar.api.batch.AbstractSensorTest;
+import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.plugins.drools.language.Drools;
-import org.sonar.plugins.drools.resources.DroolsFile;
-import org.sonar.plugins.drools.resources.DroolsPackage;
+
 
 /**
- * Import of source files to sonar database.
+ * Test for drools language sensor.
  *
  * @author Jeremie Lagarde
  * @since 0.1
  */
-public class DroolsSourceImporter extends AbstractSourceImporter {
-
-  public DroolsSourceImporter(Project project) {
-    super(new Drools(project));
+public class DroolsSensorTest extends AbstractSensorTest<Drools> {
+  
+  @Test
+  public void testAnalyseSingleDrlRuleCode() throws Exception {
+    File pomFile = new File("projects/simple/pom.xml");
+    final Project project = loadProjectFromPom(pomFile);
     DroolsPlugin.configureSourceDir(project);
+    project.getPom().getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
+    SensorContext context = analyse(new DroolsSensor(),project);
+    context.hashCode();
   }
 
   @Override
-  protected DroolsFile createResource(File file, List<File> sourceDirs, boolean unitTest) {
-    return file != null ? DroolsFile.fromIOFile(file, unitTest) : null;
+  protected Drools getLanguage() {
+    return Drools.INSTANCE;
   }
 
-
-  @Override
-  public String toString() {
-    return getClass().getSimpleName();
-  }
 
 }

@@ -22,6 +22,8 @@ package org.sonar.plugins.drools;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.Extension;
 import org.sonar.api.Plugin;
 import org.sonar.api.Properties;
@@ -42,6 +44,8 @@ import org.sonar.plugins.drools.language.DroolsCodeColorizerFormat;
     @Property(key = DroolsPlugin.SOURCE_DIRECTORY, name = "Source directory", description = "Source directory that will be scanned.",
         defaultValue = "src/main/rules", global = false, project = true) })
 public final class DroolsPlugin implements Plugin {
+
+  public static final Logger LOG = LoggerFactory.getLogger("org.sonar.plugins.drools");
 
   public static final String FILE_EXTENSIONS = "sonar.drools.fileExtensions";
   private static final String KEY = "sonar-drools-plugin";
@@ -68,6 +72,8 @@ public final class DroolsPlugin implements Plugin {
     list.add(DroolsSourceImporter.class);
     // Source Code Colorizer
     list.add(DroolsCodeColorizerFormat.class);
+    
+    list.add(DroolsSensor.class);
 
     return list;
   }
