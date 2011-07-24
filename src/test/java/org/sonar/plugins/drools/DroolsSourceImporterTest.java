@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-import org.sonar.api.batch.AbstractSensorTest;
+import org.sonar.api.batch.AbstractLanguageSensorTest;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.drools.language.Drools;
@@ -38,7 +38,7 @@ import org.sonar.plugins.drools.resources.DroolsFile;
  * @author Jeremie Lagarde
  * @since 0.1
  */
-public class DroolsSourceImporterTest extends AbstractSensorTest<Drools> {
+public class DroolsSourceImporterTest extends AbstractLanguageSensorTest<Drools> {
   
   @Test
   public void testAnalyse() throws Exception {

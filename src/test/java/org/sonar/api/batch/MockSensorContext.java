@@ -51,13 +51,13 @@ public abstract class MockSensorContext implements SensorContext {
     return violations;
   }
 
-  private Map<String,String> getSources() {
+  private Map<String, String> getSources() {
     if (sources == null) {
-      sources = new HashMap<String,String>();
+      sources = new HashMap<String, String>();
     }
     return sources;
   }
-  
+
   public Measure saveMeasure(Resource resource, Measure measure) {
     getMeasures().put(resource, measure);
     return measure;
@@ -102,31 +102,36 @@ public abstract class MockSensorContext implements SensorContext {
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append(MockSensorContext.class.getCanonicalName()).append("\n");
-    builder.append("  Measures ").append("\n");
-    if (measures.get(null).size() != 0) {
-      builder.append("    project : ");
-      for (Measure measure : measures.get(null)) {
-        builder.append(measure.toString()).append(" ");   
-      }
-      builder.append("\n");
-    }
-    for (Resource resource : measures.keySet()) {
-      if (resource!=null) {
-        builder.append("    ").append(resource.getName()).append(" ");
-        for (Measure measure : measures.get(resource)) {
-          builder.append("\"").append(measure.getMetric().getName()).append("\"=").append(measure.getValue()).append(" ");   
+    if (measures != null) {
+      builder.append("  Measures ").append("\n");
+      if ((measures.get(null) != null) && (measures.get(null).size() != 0)) {
+        builder.append("    project : ");
+        for (Measure measure : measures.get(null)) {
+          builder.append(measure.toString()).append(" ");
         }
         builder.append("\n");
       }
+      for (Resource resource : measures.keySet()) {
+        if (resource != null) {
+          builder.append("    ").append(resource.getName()).append(" ");
+          for (Measure measure : measures.get(resource)) {
+            builder.append("\"").append(measure.getMetric().getName()).append("\"=").append(measure.getValue()).append(" ");
+          }
+          builder.append("\n");
+        }
+      }
     }
-    builder.append("  Violations ").append("\n");
-    for (Violation violation : getViolations()) {
-      builder.append("    ").append(violation.getResource().getName()).append(" : ").append(violation.getRule().getKey()).append(" ").append(violation.getMessage()).append("\n");
-    }    
+    if (violations != null) {
+      builder.append("  Violations ").append("\n");
+      for (Violation violation : getViolations()) {
+        builder.append("    ").append(violation.getResource().getName()).append(" : ").append(violation.getRule().getKey()).append(" ")
+            .append(violation.getMessage()).append("\n");
+      }
+    }
     return builder.toString();
-  } 
-  
+  }
+
   public void saveSource(Resource resource, String source) {
-    getSources().put(resource.getKey(), source);    
+    getSources().put(resource.getKey(), source);
   }
 }

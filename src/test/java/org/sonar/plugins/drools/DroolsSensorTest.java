@@ -18,34 +18,37 @@
 
 package org.sonar.plugins.drools;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+
 import java.io.File;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.api.batch.AbstractSensorTest;
+import org.sonar.api.batch.AbstractLanguageSensorTest;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.MockRuleFinder;
+import org.sonar.api.rules.Violation;
 import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.plugins.drools.language.Drools;
 import org.sonar.plugins.drools.rules.DroolsRuleRepository;
 
-
 /**
  * Test for drools language sensor.
- *
+ * 
  * @author Jeremie Lagarde
  * @since 0.1
  */
-public class DroolsSensorTest extends AbstractSensorTest<Drools> {
-  
+public class DroolsSensorTest extends AbstractLanguageSensorTest<Drools> {
+
   @Test
   public void testAnalyseSingleDrlRuleCode() throws Exception {
     File pomFile = new File("projects/simple/pom.xml");
     final Project project = loadProjectFromPom(pomFile);
     project.getPom().getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
-    SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))),project);
-    System.out.println(context);
+    SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))), project);
+    System.out.println(context);    
   }
 
   @Test @Ignore
@@ -53,7 +56,7 @@ public class DroolsSensorTest extends AbstractSensorTest<Drools> {
     File pomFile = new File("projects/verifier/pom.xml");
     final Project project = loadProjectFromPom(pomFile);
     project.getPom().getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
-    SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))),project);
+    SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))), project);
     System.out.println(context);
   }
 
@@ -61,6 +64,5 @@ public class DroolsSensorTest extends AbstractSensorTest<Drools> {
   protected Drools getLanguage() {
     return Drools.INSTANCE;
   }
-
 
 }

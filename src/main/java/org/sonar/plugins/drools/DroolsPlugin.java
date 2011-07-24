@@ -65,7 +65,6 @@ public final class DroolsPlugin implements Plugin {
         Resource resource = (Resource) iterator.next();
         File resourceDir = project.getFileSystem().resolvePath(resource.getDirectory());
         if ( !project.getFileSystem().getSourceDirs().contains(resourceDir))
-          System.out.println(" Config :: Adding " + resourceDir.getAbsolutePath());
           project.getFileSystem().addSourceDir(resourceDir);
       }
     }

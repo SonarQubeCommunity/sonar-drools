@@ -41,7 +41,7 @@ import org.sonar.api.utils.SonarException;
  * @author Jeremie Lagarde
  * @since 0.1
  */
-public abstract class AbstractSensorTest<L extends Language> {
+public abstract class AbstractLanguageSensorTest<L extends Language> {
 
   protected abstract L getLanguage();
 

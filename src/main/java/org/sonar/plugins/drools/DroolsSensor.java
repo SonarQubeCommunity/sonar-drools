@@ -109,12 +109,12 @@ public class DroolsSensor implements Sensor {
         context.saveMeasure(resource, CoreMetrics.CLASSES, (double) (resource.getPackageDescr().getRules().size() + resource
             .getPackageDescr().getFunctions().size()));
         packageMap.put(resource.getParent().getKey(), resource.getParent());
-        
+
         verifier.addResourcesToVerify(new FileSystemResource(file), ResourceType.DRL);
         verifier.fireAnalysis();
         saveViolations(resource, context, verifier.getResult());
       } catch (Throwable e) {
-        DroolsPlugin.LOG.error("error while verifier analyzing '" + file.getAbsolutePath() + "'", e);        
+        DroolsPlugin.LOG.error("error while verifier analyzing '" + file.getAbsolutePath() + "'", e);
       } finally {
         verifier.dispose();
       }
@@ -160,12 +160,7 @@ public class DroolsSensor implements Sensor {
   }
 
   protected Rule findRule(VerifierMessageBase base) {
-    System.out.println(base.getSeverity() + " [id:" + base.getId() + "] " + base.getMessageType() + " => " + base.getImpactedRules()
-        + " : " + base.getMessage());
-
-    Rule rule = ruleFinder.findByKey(DroolsRuleRepository.REPOSITORY_KEY, "DROOLS_" + base.getMessageType());
-    System.out.println("Sonar Rule : " + rule);
-    return rule;
+    return ruleFinder.findByKey(DroolsRuleRepository.REPOSITORY_KEY, "DROOLS_" + base.getMessageType());
   }
 
   protected static Source analyseSourceCode(File file) {
