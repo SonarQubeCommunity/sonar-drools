@@ -101,27 +101,27 @@ public abstract class MockSensorContext implements SensorContext {
 
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    builder.append(super.toString());
-    builder.append("Measures ").append("\n");
+    builder.append(MockSensorContext.class.getCanonicalName()).append("\n");
+    builder.append("  Measures ").append("\n");
     if (measures.get(null).size() != 0) {
-      builder.append("  project : ");
+      builder.append("    project : ");
       for (Measure measure : measures.get(null)) {
         builder.append(measure.toString()).append(" ");   
       }
       builder.append("\n");
     }
-    for (Resource resource : measures.keys()) {
+    for (Resource resource : measures.keySet()) {
       if (resource!=null) {
-        builder.append("  ").append(resource.getName()).append(" ");
+        builder.append("    ").append(resource.getName()).append(" ");
         for (Measure measure : measures.get(resource)) {
-          builder.append(measure.getMetric().getName()).append("=").append(measure.getValue());   
+          builder.append("\"").append(measure.getMetric().getName()).append("\"=").append(measure.getValue()).append(" ");   
         }
         builder.append("\n");
       }
     }
-    builder.append("Violations ").append("\n");
+    builder.append("  Violations ").append("\n");
     for (Violation violation : getViolations()) {
-      builder.append("  ").append(violation.getResource().getName()).append(" : ").append(violation.getRule().getKey()).append(" ").append(violation.getMessage()).append("\n");
+      builder.append("    ").append(violation.getResource().getName()).append(" : ").append(violation.getRule().getKey()).append(" ").append(violation.getMessage()).append("\n");
     }    
     return builder.toString();
   } 

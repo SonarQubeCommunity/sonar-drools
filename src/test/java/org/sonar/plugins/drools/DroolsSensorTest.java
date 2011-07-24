@@ -20,6 +20,7 @@ package org.sonar.plugins.drools;
 
 import java.io.File;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.batch.AbstractSensorTest;
 import org.sonar.api.batch.SensorContext;
@@ -42,17 +43,15 @@ public class DroolsSensorTest extends AbstractSensorTest<Drools> {
   public void testAnalyseSingleDrlRuleCode() throws Exception {
     File pomFile = new File("projects/simple/pom.xml");
     final Project project = loadProjectFromPom(pomFile);
-    DroolsPlugin.configureSourceDir(project);
     project.getPom().getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
     SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))),project);
     System.out.println(context);
   }
 
-  // @Test
+  @Test @Ignore
   public void testAnalyseVerifierTests() throws Exception {
     File pomFile = new File("projects/verifier/pom.xml");
     final Project project = loadProjectFromPom(pomFile);
-    DroolsPlugin.configureSourceDir(project);
     project.getPom().getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
     SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))),project);
     System.out.println(context);
