@@ -23,10 +23,8 @@ import java.util.List;
 
 import org.sonar.api.batch.AbstractSourceImporter;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.plugins.drools.language.Drools;
 import org.sonar.plugins.drools.resources.DroolsFile;
-import org.sonar.plugins.drools.resources.DroolsPackage;
 
 /**
  * Import of source files to sonar database.
