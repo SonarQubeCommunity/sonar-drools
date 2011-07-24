@@ -3,16 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.sonarsource.tests</groupId>
-	<artifactId>simple</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>verifier</artifactId>
 	<packaging>jar</packaging>
-	<name>Sonar Drools Plugin :: simple test</name>
+	<name>Sonar Drools Plugin :: verifier test</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<drools-version>5.2.0.Final</drools-version>
 		<sonar.language>drl</sonar.language>
 	</properties>
-	
+
 	<build>
 		<resources>
 			<resource>
@@ -22,6 +22,45 @@
 				<directory>src/main/rules</directory>
 			</resource>
 		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.drools</groupId>
+									<artifactId>drools-verifier</artifactId>
+									<version>${drools-version}</version>
+									<type>jar</type>
+									<classifier>test-sources</classifier>
+									<overWrite>false</overWrite>
+									<outputDirectory>src/main/rules</outputDirectory>
+									<excludes>**/*.java,**/*.jar</excludes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencies>

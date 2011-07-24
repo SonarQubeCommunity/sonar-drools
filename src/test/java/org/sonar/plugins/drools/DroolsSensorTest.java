@@ -24,7 +24,10 @@ import org.junit.Test;
 import org.sonar.api.batch.AbstractSensorTest;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
+import org.sonar.api.rules.MockRuleFinder;
+import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.plugins.drools.language.Drools;
+import org.sonar.plugins.drools.rules.DroolsRuleRepository;
 
 
 /**
@@ -41,8 +44,18 @@ public class DroolsSensorTest extends AbstractSensorTest<Drools> {
     final Project project = loadProjectFromPom(pomFile);
     DroolsPlugin.configureSourceDir(project);
     project.getPom().getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
-    SensorContext context = analyse(new DroolsSensor(),project);
-    context.hashCode();
+    SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))),project);
+    System.out.println(context);
+  }
+
+  // @Test
+  public void testAnalyseVerifierTests() throws Exception {
+    File pomFile = new File("projects/verifier/pom.xml");
+    final Project project = loadProjectFromPom(pomFile);
+    DroolsPlugin.configureSourceDir(project);
+    project.getPom().getProperties().put(DroolsPlugin.SOURCE_DIRECTORY, "src/main/rules");
+    SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))),project);
+    System.out.println(context);
   }
 
   @Override

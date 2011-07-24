@@ -48,7 +48,7 @@
 		<license.owner>Jérémie Lagarde</license.owner>
 
 		<!-- Drools version -->
-		<drools.version>5.1.1</drools.version>
+		<drools.version>5.2.0.Final</drools.version>
 
 	</properties>
 
@@ -79,6 +79,11 @@
 			<dependency>
 				<groupId>org.drools</groupId>
 				<artifactId>drools-compiler</artifactId>
+				<version>${drools.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.drools</groupId>
+				<artifactId>drools-verifier</artifactId>
 				<version>${drools.version}</version>
 			</dependency>
 		</dependencies>
@@ -120,6 +125,10 @@
 			<groupId>org.drools</groupId>
 			<artifactId>drools-compiler</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-verifier</artifactId>
+		</dependency>
 
 		<!-- Test dependencies -->
 		<dependency>
@@ -154,7 +163,6 @@
 	<profiles>
 		<profile>
 			<id>integration-tests</id>
-
 			<build>
 				<plugins>
 					<plugin>

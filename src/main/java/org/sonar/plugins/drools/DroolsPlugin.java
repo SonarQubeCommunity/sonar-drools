@@ -16,12 +16,14 @@
  * limitations under the License.
  */
 
-
 package org.sonar.plugins.drools;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.maven.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Extension;
@@ -31,10 +33,12 @@ import org.sonar.api.Property;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.drools.language.Drools;
 import org.sonar.plugins.drools.language.DroolsCodeColorizerFormat;
+import org.sonar.plugins.drools.rules.DefaultDroolsProfile;
+import org.sonar.plugins.drools.rules.DroolsRuleRepository;
 
 /**
  * Drools Plugin publishes extensions to sonar engine.
- *
+ * 
  * @author Jeremie Lagarde
  * @since 0.1
  */
@@ -56,6 +60,13 @@ public final class DroolsPlugin implements Plugin {
     if (sourceDir != null) {
       project.getFileSystem().getSourceDirs().clear();
       project.getFileSystem().addSourceDir(project.getFileSystem().resolvePath(sourceDir));
+    } else {
+      for (Iterator iterator = project.getPom().getResources().iterator(); iterator.hasNext();) {
+        Resource resource = (Resource) iterator.next();
+        File resourceDir = project.getFileSystem().resolvePath(resource.getDirectory());
+        if ( !project.getFileSystem().getSourceDirs().contains(resourceDir))
+          project.getFileSystem().addSourceDir(resourceDir);
+      }
     }
   }
 
@@ -72,7 +83,11 @@ public final class DroolsPlugin implements Plugin {
     list.add(DroolsSourceImporter.class);
     // Source Code Colorizer
     list.add(DroolsCodeColorizerFormat.class);
-    
+    // Rules repository
+    list.add(DroolsRuleRepository.class);
+    // Default Profile
+    list.add(DefaultDroolsProfile.class);
+    // Metrics sensor
     list.add(DroolsSensor.class);
 
     return list;
@@ -83,7 +98,7 @@ public final class DroolsPlugin implements Plugin {
   }
 
   public String getName() {
-    return "Drools plugin";
+    return "Drools";
   }
 
   @Override

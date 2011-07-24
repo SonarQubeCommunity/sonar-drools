@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules>
+	<rule key="DROOLS_NOT_SPECIFIED">
+		<priority>MAJOR</priority>
+		<name><![CDATA[Drools - Not specified rule]]></name>
+		<configKey>DROOLS_NOT_SPECIFIED</configKey>
+		<description><![CDATA[]]></description>
+	</rule>
+	<rule key="DROOLS_RANGE_CHECK">
+		<priority>MINOR</priority>
+		<name><![CDATA[Drools - Range validation]]></name>
+		<configKey>DROOLS_RANGE_CHECK</configKey>
+		<description><![CDATA[Missing ranges, making sure they are all covered]]></description>
+	</rule>
+	<rule key="DROOLS_MISSING_EQUALITY">
+		<priority>INFO</priority>
+		<name><![CDATA[Drools - Missing Equality]]></name>
+		<configKey>DROOLS_MISSING_EQUALITY</configKey>
+		<description><![CDATA[When there are inequalities, but not equality being catered for.]]></description>
+	</rule>
+	<rule key="DROOLS_MISSING_COMPONENT">
+		<priority>INFO</priority>
+		<name><![CDATA[Drools - Missing component]]></name>
+		<configKey>DROOLS_MISSING_COMPONENT</configKey>
+		<description><![CDATA[]]></description>
+	</rule>
+	<rule key="DROOLS_REDUNDANCY">
+		<priority>INFO</priority>
+		<name><![CDATA[Drools - Redundancy]]></name>
+		<configKey>DROOLS_REDUNDANCY</configKey>
+		<description><![CDATA[Same restriction exists twice]]></description>
+	</rule>
+	<rule key="DROOLS_SUBSUMPTION">
+		<priority>MAJOR</priority>
+		<name><![CDATA[Drools - Subsumption]]></name>
+		<configKey>DROOLS_SUBSUMPTION</configKey>
+		<description><![CDATA[When there multiple rules that have the same RHS, and the LHS has some overlapping conditions. P( x > 10 ) and P( x > 100 )]]></description>
+	</rule>
+	<rule key="DROOLS_OPTIMISATION">
+		<priority>INFO</priority>
+		<name><![CDATA[Drools - Optimisation]]></name>
+		<configKey>DROOLS_OPTIMISATION</configKey>
+		<description><![CDATA[]]></description>
+	</rule>
+	<rule key="DROOLS_INCOHERENCE">
+		<priority>MAJOR</priority>
+		<name><![CDATA[Drools - Incoherence]]></name>
+		<configKey>DROOLS_INCOHERENCE</configKey>
+		<description><![CDATA[Nothing can meet rule A]]></description>
+	</rule>
+	<rule key="DROOLS_OVERLAP">
+		<priority>MINOR</priority>
+		<name><![CDATA[Drools - Restrictions are overlapping]]></name>
+		<configKey>DROOLS_OVERLAP</configKey>
+		<description><![CDATA[Rules that are two restrictions are overlapping. Pattern1( a > 10 ) and Pattern1( a > 100 )]]></description>
+	</rule>
+	<rule key="DROOLS_ALWAYS_FALSE">
+		<priority>MAJOR</priority>
+		<name><![CDATA[Drools - Rule always false]]></name>
+		<configKey>DROOLS_ALWAYS_FALSE</configKey>
+		<description><![CDATA[Rules that are always false. Pattern( a == b && a != b )]]></description>
+	</rule>
+	<rule key="DROOLS_ALWAYS_TRUE">
+		<priority>MAJOR</priority>
+		<name><![CDATA[Drools - Rule always true]]></name>
+		<configKey>DROOLS_ALWAYS_TRUE</configKey>
+		<description><![CDATA[Rules and Patterns that are always satisfied. Pattern( a > b || a <= b )]]></description>
+	</rule>
+	<rule key="DROOLS_EQUIVALANCE">
+		<priority>INFO</priority>
+		<name><![CDATA[Drools - Equivalance]]></name>
+		<configKey>DROOLS_EQUIVALANCE</configKey>
+		<description><![CDATA[]]></description>
+	</rule>
+</rules>

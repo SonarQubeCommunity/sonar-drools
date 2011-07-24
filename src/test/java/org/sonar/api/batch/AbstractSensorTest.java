@@ -29,8 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.sonar.api.resources.DefaultProjectFileSystem;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
@@ -38,7 +37,7 @@ import org.sonar.api.utils.SonarException;
 
 /**
  * Abstract test for basic language sensor.
- *
+ * 
  * @author Jeremie Lagarde
  * @since 0.1
  */
@@ -80,8 +79,12 @@ public abstract class AbstractSensorTest<L extends Language> {
   }
 
   protected SensorContext analyse(Sensor sensor, Project project) throws Exception {
-    SensorContext context = mock(SensorContext.class);
+    SensorContext context = createMockSensorContext();
     sensor.analyse(project, context);
     return context;
   }
+
+  protected SensorContext createMockSensorContext() {
+    return mock(MockSensorContext.class, new CallsRealMethods());
+  }  
 }

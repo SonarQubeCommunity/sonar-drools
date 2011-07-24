@@ -20,23 +20,45 @@ package org.sonar.plugins.drools;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.drools.builder.ResourceType;
+import org.drools.io.impl.FileSystemResource;
+import org.drools.lang.descr.RuleDescr;
+import org.drools.verifier.Verifier;
+import org.drools.verifier.builder.VerifierBuilder;
+import org.drools.verifier.builder.VerifierBuilderFactory;
+import org.drools.verifier.components.RuleComponent;
+import org.drools.verifier.data.VerifierReport;
+import org.drools.verifier.report.VerifierReportWriter;
+import org.drools.verifier.report.VerifierReportWriterFactory;
+import org.drools.verifier.report.components.Severity;
+import org.drools.verifier.report.components.VerifierMessageBase;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleFinder;
+import org.sonar.api.rules.Violation;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.drools.language.DrlKeywords;
 import org.sonar.plugins.drools.language.Drools;
 import org.sonar.plugins.drools.resources.DroolsFile;
 import org.sonar.plugins.drools.resources.DroolsPackage;
+import org.sonar.plugins.drools.rules.DroolsRuleRepository;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.recognizer.CamelCaseDetector;
 import org.sonar.squid.recognizer.CodeRecognizer;
@@ -49,14 +71,25 @@ import org.sonar.squid.text.Source;
 
 /**
  * Drools sensor for standard file metrics.
- *
+ * 
  * @author Jeremie Lagarde
  * @since 0.1
  */
 public class DroolsSensor implements Sensor {
 
   private static final double CODE_RECOGNIZER_SENSITIVITY = 0.9;
-  
+
+  private final RuleFinder ruleFinder;
+
+  public DroolsSensor(RuleFinder ruleFinder) {
+    this.ruleFinder = ruleFinder;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
   public boolean shouldExecuteOnProject(Project project) {
     return project.getLanguage().equals(Drools.INSTANCE);
   }
@@ -66,7 +99,9 @@ public class DroolsSensor implements Sensor {
     Language drools = new Drools(project);
     ProjectFileSystem fileSystem = project.getFileSystem();
     Map<String, DroolsPackage> packageMap = new HashMap<String, DroolsPackage>();
+    VerifierBuilder verifierBuilder = VerifierBuilderFactory.newVerifierBuilder();
     for (File file : fileSystem.getSourceFiles(drools)) {
+      Verifier verifier = verifierBuilder.newVerifier();
       try {
         DroolsFile resource = DroolsFile.fromIOFile(file, false);
         Source source = analyseSourceCode(file);
@@ -79,12 +114,63 @@ public class DroolsSensor implements Sensor {
         context.saveMeasure(resource, CoreMetrics.CLASSES, (double) (resource.getPackageDescr().getRules().size() + resource
             .getPackageDescr().getFunctions().size()));
         packageMap.put(resource.getParent().getKey(), resource.getParent());
-      } catch (Exception e) {
+        
+        verifier.addResourcesToVerify(new FileSystemResource(file), ResourceType.DRL);
+        verifier.fireAnalysis();
+        saveViolations(resource, context, verifier.getResult());
+      } catch (Throwable e) {
+        DroolsPlugin.LOG.error("error while verifier analyzing '" + file.getAbsolutePath() + "'", e);        
+      } finally {
+        verifier.dispose();
       }
     }
+
     for (DroolsPackage droolsPackage : packageMap.values()) {
       context.saveMeasure(droolsPackage, CoreMetrics.PACKAGES, 1.0);
     }
+  }
+
+  protected void saveViolations(DroolsFile resource, SensorContext context, VerifierReport report) {
+    List<Violation> violations = new ArrayList<Violation>();
+    for (Severity severity : Severity.values()) {
+      Collection<VerifierMessageBase> messages = report.getBySeverity(severity);
+      for (VerifierMessageBase base : messages) {
+        Rule rule = findRule(base);
+        // ignore violations from report, if rule not activated in Sonar
+        if (rule != null) {
+          if (context.getResource(resource) != null) {
+            int line = getLineNumber(resource, base);
+            Violation violation = Violation.create(rule, resource).setLineId(line).setMessage(base.getMessage());
+            violations.add(violation);
+          }
+        }
+      }
+    }
+    context.saveViolations(violations);
+  }
+
+  protected int getLineNumber(DroolsFile resource, VerifierMessageBase base) {
+    for (RuleDescr ruleDescr : resource.getPackageDescr().getRules()) {
+      if (base.getFaulty() instanceof RuleComponent)
+        if (((RuleComponent) base.getFaulty()).getRuleName().equals(ruleDescr.getName())) {
+          return ruleDescr.getLine();
+        }
+    }
+    return 1;
+  }
+
+  protected int getLineNumber(DroolsFile resource, RuleComponent component) {
+
+    return 1;
+  }
+
+  protected Rule findRule(VerifierMessageBase base) {
+    System.out.println(base.getSeverity() + " [id:" + base.getId() + "] " + base.getMessageType() + " => " + base.getImpactedRules()
+        + " : " + base.getMessage());
+
+    Rule rule = ruleFinder.findByKey(DroolsRuleRepository.REPOSITORY_KEY, "DROOLS_" + base.getMessageType());
+    System.out.println("Sonar Rule : " + rule);
+    return rule;
   }
 
   protected static Source analyseSourceCode(File file) {

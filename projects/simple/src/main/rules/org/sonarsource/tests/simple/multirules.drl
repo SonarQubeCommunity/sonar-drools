@@ -1,16 +1,20 @@
 package org.sonarsource.tests.simple
 
-rule "My Rule 1"   
+declare SonarUser
+	name : String
+end
+
+rule "Rule 1"   
     when
-        eval (1==1)
+        u: SonarUser ( )
     then
-        System.out.println("Hello sonar users from my rule 1");
+        System.out.println("Hello " + u.getName() + " from rule 1");
 end
 
 
-rule "My Rule 2"   
+rule "Rule 2"   
     when
-        eval (1==1)
+        u: SonarUser (name == "Jeremie" )
     then
-        System.out.println("Hello sonar users from my rule 2");
+        System.out.println("Hello " + u.getName() + " from rule 2");
 end
