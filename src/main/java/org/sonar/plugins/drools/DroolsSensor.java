@@ -31,11 +31,13 @@ import java.util.Set;
 
 import org.drools.builder.ResourceType;
 import org.drools.io.impl.FileSystemResource;
+import org.drools.lang.descr.BaseDescr;
 import org.drools.lang.descr.RuleDescr;
 import org.drools.verifier.Verifier;
 import org.drools.verifier.builder.VerifierBuilder;
 import org.drools.verifier.builder.VerifierBuilderFactory;
 import org.drools.verifier.components.RuleComponent;
+import org.drools.verifier.data.VerifierComponent;
 import org.drools.verifier.data.VerifierReport;
 import org.drools.verifier.report.components.Severity;
 import org.drools.verifier.report.components.VerifierMessageBase;
@@ -145,17 +147,19 @@ public class DroolsSensor implements Sensor {
   }
 
   protected int getLineNumber(DroolsFile resource, VerifierMessageBase base) {
+    if(base.getFaulty() instanceof VerifierComponent) {
+      BaseDescr baseDescr = ((VerifierComponent)base.getFaulty()).getDescr();
+      return baseDescr.getLine();
+    }
     for (RuleDescr ruleDescr : resource.getPackageDescr().getRules()) {
-      if (base.getFaulty() instanceof RuleComponent)
+      if (base.getFaulty() instanceof RuleComponent) {
         if (((RuleComponent) base.getFaulty()).getRuleName().equals(ruleDescr.getName())) {
           return ruleDescr.getLine();
         }
+      }
+      if(base.getImpactedRules().containsValue(ruleDescr.getName()))
+    	  return ruleDescr.getLine();
     }
-    return 1;
-  }
-
-  protected int getLineNumber(DroolsFile resource, RuleComponent component) {
-
     return 1;
   }
 

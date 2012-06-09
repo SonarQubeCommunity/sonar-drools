@@ -72,7 +72,7 @@ public class DroolsFile extends Resource<DroolsPackage> {
     }
     DrlParser parser = new DrlParser();
     try {
-      PackageDescr packageDescr = parser.parse(new FileReader(file));
+      PackageDescr packageDescr = parser.parse(true, new FileReader(file));
       return new DroolsFile(packageDescr, file.getName(), unitTest);
     } catch (Exception e) {
       DroolsPlugin.LOG.error("Unable to parse " + file.getName(),e);

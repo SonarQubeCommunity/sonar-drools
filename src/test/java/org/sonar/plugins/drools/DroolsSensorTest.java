@@ -18,9 +18,6 @@
 
 package org.sonar.plugins.drools;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-
 import java.io.File;
 
 import org.junit.Ignore;
@@ -29,7 +26,6 @@ import org.sonar.api.batch.AbstractLanguageSensorTest;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.MockRuleFinder;
-import org.sonar.api.rules.Violation;
 import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.plugins.drools.language.Drools;
 import org.sonar.plugins.drools.rules.DroolsRuleRepository;
