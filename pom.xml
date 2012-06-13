@@ -39,7 +39,6 @@
   <properties>
     <!-- Sonar Plugin configuration -->
     <sonar.version>2.4</sonar.version>
-    <license.name>AL2</license.name>
     <sonar.pluginName>Drools</sonar.pluginName>
     <sonar.pluginClass>org.sonar.plugins.drools.DroolsPlugin</sonar.pluginClass>
 
@@ -57,9 +56,10 @@
     <url>http://jira.codehaus.org/browse/SONARPLUGINS/component/14704</url>
   </issueManagement>
 
-  <!-- Not yet activated -->
-  <!-- ciManagement> <system>BAMBOO</system> <url>http://ci.codehaus.org/browse/SONAR-DROOLS</url> 
-    </ciManagement -->
+  <ciManagement>
+    <system>BAMBOO</system>
+    <url>http://bamboo.ci.codehaus.org/browse/SONAR-DROOLS</url>
+  </ciManagement>
 
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/drools</connection>
@@ -88,7 +88,6 @@
     </dependencies>
   </dependencyManagement>
 
-  
   <dependencies>
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
@@ -105,10 +104,10 @@
       <groupId>org.drools</groupId>
       <artifactId>drools-verifier</artifactId>
       <exclusions>
-      	<exclusion>
-      		<artifactId>itext</artifactId>
-      		<groupId>com.lowagie</groupId>
-      	</exclusion>
+        <exclusion>
+          <artifactId>itext</artifactId>
+          <groupId>com.lowagie</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
 
@@ -140,63 +139,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-  	<pluginManagement>
-  		<plugins>
-  			<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-  			<plugin>
-  				<groupId>org.eclipse.m2e</groupId>
-  				<artifactId>lifecycle-mapping</artifactId>
-  				<version>1.0.0</version>
-  				<configuration>
-  					<lifecycleMappingMetadata>
-  						<pluginExecutions>
-  							<pluginExecution>
-  								<pluginExecutionFilter>
-  									<groupId>
-  										org.codehaus.sonar
-  									</groupId>
-  									<artifactId>
-  										sonar-packaging-maven-plugin
-  									</artifactId>
-  									<versionRange>
-  										[1.1,)
-  									</versionRange>
-  									<goals>
-  										<goal>
-  											check-dependencies
-  										</goal>
-  									</goals>
-  								</pluginExecutionFilter>
-  								<action>
-  									<ignore></ignore>
-  								</action>
-  							</pluginExecution>
-  							<pluginExecution>
-  								<pluginExecutionFilter>
-  									<groupId>
-  										com.mycila.maven-license-plugin
-  									</groupId>
-  									<artifactId>
-  										maven-license-plugin
-  									</artifactId>
-  									<versionRange>
-  										[1.9.0,)
-  									</versionRange>
-  									<goals>
-  										<goal>check</goal>
-  									</goals>
-  								</pluginExecutionFilter>
-  								<action>
-  									<ignore></ignore>
-  								</action>
-  							</pluginExecution>
-  						</pluginExecutions>
-  					</lifecycleMappingMetadata>
-  				</configuration>
-  			</plugin>
-  		</plugins>
-  	</pluginManagement>
-  </build>
 </project>
