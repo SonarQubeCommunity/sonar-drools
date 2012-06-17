@@ -116,7 +116,7 @@ public class DroolsSensor implements Sensor {
         verifier.addResourcesToVerify(new FileSystemResource(file), ResourceType.DRL);
         verifier.fireAnalysis();
         saveViolations(resource, context, verifier.getResult());
-      } catch (Throwable e) {
+      } catch (Exception e) {
         DroolsPlugin.LOG.error("error while verifier analyzing '" + file.getAbsolutePath() + "'", e);
       } finally {
         verifier.dispose();
@@ -135,12 +135,10 @@ public class DroolsSensor implements Sensor {
       for (VerifierMessageBase base : messages) {
         Rule rule = findRule(base);
         // ignore violations from report, if rule not activated in Sonar
-        if (rule != null) {
-          if (context.getResource(resource) != null) {
-            int line = getLineNumber(resource, base);
-            Violation violation = Violation.create(rule, resource).setLineId(line).setMessage(base.getMessage());
-            violations.add(violation);
-          }
+	    if (rule != null && context.getResource(resource) != null) {
+	      int line = getLineNumber(resource, base);
+	      Violation violation = Violation.create(rule, resource).setLineId(line).setMessage(base.getMessage());
+	      violations.add(violation);          
         }
       }
     }
@@ -154,12 +152,14 @@ public class DroolsSensor implements Sensor {
     }
     for (RuleDescr ruleDescr : resource.getPackageDescr().getRules()) {
       if (base.getFaulty() instanceof RuleComponent) {
-        if (((RuleComponent) base.getFaulty()).getRuleName().equals(ruleDescr.getName())) {
+        RuleComponent ruleComponent = (RuleComponent) base.getFaulty();
+        if (ruleComponent.getRuleName().equals(ruleDescr.getName())) {
           return ruleDescr.getLine();
         }
       }
-      if(base.getImpactedRules().containsValue(ruleDescr.getName()))
+      if(base.getImpactedRules().containsValue(ruleDescr.getName())) {
     	  return ruleDescr.getLine();
+      }
     }
     return 1;
   }

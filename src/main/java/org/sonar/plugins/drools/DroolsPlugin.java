@@ -65,8 +65,9 @@ public final class DroolsPlugin implements Plugin {
       for (Iterator iterator = project.getPom().getResources().iterator(); iterator.hasNext();) {
         Resource resource = (Resource) iterator.next();
         File resourceDir = project.getFileSystem().resolvePath(resource.getDirectory());
-        if ( !project.getFileSystem().getSourceDirs().contains(resourceDir))
+        if ( !project.getFileSystem().getSourceDirs().contains(resourceDir)) {
           project.getFileSystem().addSourceDir(resourceDir);
+        }
       }
     }
   }

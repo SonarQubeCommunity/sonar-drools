@@ -32,8 +32,8 @@ import org.sonar.plugins.drools.language.Drools;
  */
 public class DroolsRuleRepository extends XMLRuleRepository {
   
-  public final static String REPOSITORY_KEY = "sonar-drools-plugin"; 
-  public final static String REPOSITORY_NAME = "Drools Violations"; 
+  public static final String REPOSITORY_KEY = "sonar-drools-plugin"; 
+  public static final String REPOSITORY_NAME = "Drools Violations"; 
   
   public DroolsRuleRepository(XMLRuleParser xmlRuleParser) {
     super(REPOSITORY_KEY, Drools.KEY, xmlRuleParser);

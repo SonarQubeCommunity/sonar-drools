@@ -48,7 +48,16 @@ public class DroolsSensorTest extends AbstractLanguageSensorTest<Drools> {
     System.out.println(context);    
   }
 
+  @Test
+  public void testAnalyseSingleDrlRuleCodeWithNoSourceDirectory() throws Exception {
+    File pomFile = new File("projects/simple/pom.xml");
+    final Project project = loadProjectFromPom(pomFile);
+    SensorContext context = analyse(new DroolsSensor(new MockRuleFinder(new DroolsRuleRepository(new XMLRuleParser()))), project);
+    System.out.println(context);    
+  }
+  
   @Test @Ignore
+  // Ignored because is too long for the ci server, but it works!
   public void testAnalyseVerifierTests() throws Exception {
     File pomFile = new File("projects/verifier/pom.xml");
     final Project project = loadProjectFromPom(pomFile);

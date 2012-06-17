@@ -48,9 +48,10 @@ public class DroolsFile extends Resource<DroolsPackage> {
 
   public DroolsFile(PackageDescr packageDescr, String fileName,  boolean unitTest) {
     super();
-    this.setPackageDescr(packageDescr);
-    if (StringUtils.isNotBlank(fileName))
+    this.packageDescr = packageDescr;
+    if (StringUtils.isNotBlank(fileName)) {
       this.fileName = fileName;
+    }
     String key;
     if (packageDescr == null) {
       this.packageKey = DroolsPackage.DEFAULT_PACKAGE_NAME;
