@@ -59,14 +59,17 @@ public final class DroolsPlugin implements Plugin {
   public static void configureSourceDir(Project project) {
     String sourceDir = (String) project.getProperty(SOURCE_DIRECTORY);
     if (sourceDir != null) {
-      project.getFileSystem().getSourceDirs().clear();
-      project.getFileSystem().addSourceDir(project.getFileSystem().resolvePath(sourceDir));
-    } else {
+      if(project.getFileSystem() != null) {
+        project.getFileSystem().addSourceDir(project.getFileSystem().resolvePath(sourceDir));
+      }
+    } else if (project.getPom()!=null && project.getPom().getResources() != null) {
       for (Iterator iterator = project.getPom().getResources().iterator(); iterator.hasNext();) {
         Resource resource = (Resource) iterator.next();
-        File resourceDir = project.getFileSystem().resolvePath(resource.getDirectory());
-        if ( !project.getFileSystem().getSourceDirs().contains(resourceDir)) {
-          project.getFileSystem().addSourceDir(resourceDir);
+        if(resource !=null && project.getFileSystem() !=null) {
+          File resourceDir = project.getFileSystem().resolvePath(resource.getDirectory());
+          if ( project.getFileSystem().getSourceDirs()!=null && !project.getFileSystem().getSourceDirs().contains(resourceDir)) {
+            project.getFileSystem().addSourceDir(resourceDir);
+          }
         }
       }
     }
