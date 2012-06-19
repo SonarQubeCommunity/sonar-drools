@@ -11,7 +11,7 @@
 
   <artifactId>sonar-drools-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>0.2</version>
+  <version>0.3-SNAPSHOT</version>
   <name>Sonar Drools Plugin</name>
   <description>Analyze Drools files.</description>
   <inceptionYear>2011</inceptionYear>
@@ -61,9 +61,9 @@
   </ciManagement>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/tags/sonar-drools-plugin-0.2</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-drools-plugin-0.2</developerConnection>
-    <url>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-drools-plugin-0.2</url>
+    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/drools</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/drools</developerConnection>
+    <url>http://svn.codehaus.org/sonar-plugins/</url>
   </scm>
 
   <dependencyManagement>
