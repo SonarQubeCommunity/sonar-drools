@@ -45,7 +45,7 @@
     <license.owner>Jérémie Lagarde</license.owner>
 
     <!-- Drools version -->
-    <drools.version>5.4.0.Final</drools.version>
+    <drools.version>5.6.0.Final</drools.version>
 
   </properties>
 
